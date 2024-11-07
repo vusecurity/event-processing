@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
+    <springProperty scope="context" name="springAppName" source="spring.application.name"/>
+
+    <!--    <conversionRule conversionWord="crlf" converterClass="org.owasp.security.logging.mask.CRLFConverter" />-->
+    <conversionRule conversionWord="jsonconverter" converterClass="com.vusecurity.eventprocessing.logs.json.JSONConverter" />
+
+    <property name="FILE_LOG_PATTERN"
+              value="%d{yyyy-MM-dd HH:mm:ss.SSS} ${LOG_LEVEL_PATTERN:-%5p} ${PID:- } --- [%15.15t] %-40.40logger{39} : %m %n${LOG_EXCEPTION_CONVERSION_WORD:-%wEx}"/>
+
+    <springProfile name="default">
+        <!-- Appender to log to console -->
+        <appender name="console" class="ch.qos.logback.core.ConsoleAppender">
+            <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+                <!-- Minimum logging level to be presented in the console logs-->
+                <level>DEBUG</level>
+            </filter>
+
+            <encoder class="net.logstash.logback.encoder.LoggingEventCompositeJsonEncoder">
+                <providers>
+                    <timestamp>
+                        <timeZone>UTC</timeZone>
+                    </timestamp>
+                    <pattern>
+                        <pattern>
+                            {
+                            "client": "%X{tenant}",
+                            "severity": "%level",
+                            "traceId": "%X{traceId}",
+                            "spanId": "%X{spanId}",
+                            "groupId": "${springAppName:-}",
+                            "operationId": "%X{operationId}",
+                            "httpMessageType": "%X{httpMessageType}",
+                            "http_status": "%X{http_status}",
+                            "srvRef": "%X{srvRef}",
+                            "timeResponse": "%X{timeResponse}",
+                            "pid": "${PID:-}",
+                            "thread": "%thread",
+                            "class": "%logger{40}",
+                            "role": "%X{role}",
+                            "message": "#asJson{%jsonconverter(%message)}"
+                            }
+                        </pattern>
+                    </pattern>
+                </providers>
+            </encoder>
+        </appender>
+
+        <root level="INFO">
+            <appender-ref ref="console"/>
+        </root>
+    </springProfile>
+
+    <!-- Default Configuration (Raw Logging) -->
+    <springProfile name="raw-logger">
+        <!-- Standard console appender for raw logging -->
+        <include resource="org/springframework/boot/logging/logback/console-appender.xml"/>
+
+        <root level="INFO">
+            <appender-ref ref="CONSOLE"/>
+        </root>
+    </springProfile>
+
+</configuration>

@@ -1,0 +1,2 @@
+This project uses Esper, which is licensed under the GNU General Public License version 2 (GPLv2).
+For more information about Esper, visit: https://www.espertech.com/

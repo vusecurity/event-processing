@@ -1,0 +1,47 @@
+#config deploy
+server:
+  port: ${PORT:9091}
+  servlet:
+    contextPath: /event-processing
+
+spring:
+  application:
+    name: event-processing
+  jpa:
+    hibernate:
+      ddl-auto: none
+  datasource:
+    initialization-mode: always
+    url: ${URL_DB}
+    username: ${USER_DB}
+    password: ${PASSWORD_DB}
+    hikari:
+      idle-timeout: 600000
+      maximum-pool-size: ${CONNECTION_POOL_DB:10}
+      minimum-idle: ${IDLE_CONNECTION_DB:2}
+    dbcp2:
+      default-auto-commit: false
+  sleuth:
+    traceId128: true
+
+application:
+  version: '@app.version@'
+  esperha:
+    enabled: ${ESPERHA:false}
+  config-file: esperha-default-jdbc-passive.xml
+  esper-ha-jdbc-target:
+    url: ${URL_DB}
+    username: ${USER_DB}
+    password: ${PASSWORD_DB}
+  loglevel: ${LOG_LEVEL:INFO}
+
+logging:
+  level:
+    com:
+      espertech:
+        esperha:
+          runtime: warn
+
+jasypt:
+  encryptor:
+    password: ${MASTER_KEY_PASSWORD}

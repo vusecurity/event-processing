@@ -1,0 +1,9 @@
+*.iml
+.idea/
+event-processing-common/target/
+complex-event-processing/target/
+complex-event-processing/license/espertech.license
+
+complex-event-processing/lib/*
+!complex-event-processing/lib/.gitkeep
+complex-event-processing/test/resources/*/*.sql

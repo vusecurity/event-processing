@@ -1,0 +1,197 @@
+{
+	"info": {
+		"_postman_id": "b5ccff1f-4e31-45bf-8129-ce81fc44e19d",
+		"name": "Fraud-CEP",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "analyze",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n\r\n  \"geoData\": {\r\n    \"city\": \"Buenos Aires\",\r\n    \"country\": \"Argentina\",\r\n    \"locality\": \"CABA\",\r\n    \"postalCode\": \"1428\",\r\n    \"provinceOrState\": \"Comuna 12\"\r\n  },\r\n  \"deviceLocation\": {\r\n    \"latitude\": -55,\r\n    \"longitude\": 32\r\n  },\r\n  \"eventDate\": \"2021-04-05T18:29:33.680Z\",   \r\n  \"idChannel\": 1,\r\n  \"idOperation\": 1,\r\n  \"userId\": \"user-test-123\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:9091/event-processing/cep/event",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9091",
+					"path": [
+						"event-processing",
+						"cep",
+						"event"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "analyzeTransaction",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"deviceLocation\": {\r\n    \"latitude\": 0,\r\n    \"longitude\": 0\r\n  },\r\n  \"eventDate\": \"2021-03-18T10:51:49.758Z\",\r\n  \"idChannel\": 8,\r\n  \"idOperation\": 1,\r\n  \"ip\": \"127.0.0.1\",\r\n  \"userId\": \"user-test-1223\",\r\n  \"amount\": 3000,\r\n  \"debitAccount\": \"12312312312321\",\r\n  \"creditAccount\": \"21312321312\",\r\n   \"aditionalParameters\": {\r\n       \"ATM\": \"1\"\r\n   }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:9091/event-processing/cep/transaction",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9091",
+					"path": [
+						"event-processing",
+						"cep",
+						"transaction"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "save rule",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"enabled\": true,\r\n  \"eventStatements\": [        \r\n    {\r\n      \"context\": false,\r\n      \"statement\": \"context SegmentedByUserId select count(*) from Transaction(idChannel = 20 AND amount > 600 AND amount < 700).win:time(10 min) having  count(*) >= 5\"\r\n    }\r\n  ],\r\n  \"idAction\": 1,\r\n  \"idCriticalLevel\": 1,\r\n  \"jsonFormat\": \"string\",\r\n  \"name\": \"10 min test 20\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:9091/event-processing/cep/rules",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9091",
+					"path": [
+						"event-processing",
+						"cep",
+						"rules"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get rules",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:9091/event-processing/cep/rules",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9091",
+					"path": [
+						"event-processing",
+						"cep",
+						"rules"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get rule",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:9091/event-processing/cep/rules/2",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9091",
+					"path": [
+						"event-processing",
+						"cep",
+						"rules",
+						"2"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "delete rule",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:9091/event-processing/cep/rules/3",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9091",
+					"path": [
+						"event-processing",
+						"cep",
+						"rules",
+						"3"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

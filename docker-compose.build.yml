@@ -1,0 +1,35 @@
+version: "3.7"
+services:
+  cep:
+    image: vusecuritydev.azurecr.io/vufrauda-cep:1.1.8-release-latest
+    environment:
+      PORT: 9091
+      URL_DB: "jdbc:postgresql://cep-db-postgres:5432/fraudcep"
+      USER_DB: cepuser
+      PASSWORD_DB: development
+      CONNECTION_POOL_DB: 10
+      IDLE_CONNECTION_DB: 10
+      ESPERHA: "false"
+    ports:
+      - "9091:9091"
+    restart: always
+    depends_on:
+      - cep-db-postgres
+  
+  cep-db-postgres:
+    build:
+      context: ./complex-event-processing
+      dockerfile: ./docker/cep-db-postgres/Dockerfile
+    restart: always
+    environment:
+      POSTGRES_DB: fraudcep
+      POSTGRES_USER: cepuser
+      POSTGRES_PASSWORD: development
+      PGDATA: /var/lib/postgresql/data
+    volumes:
+      - cep-db-postgres-data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+volumes:
+  cep-db-postgres-data:
